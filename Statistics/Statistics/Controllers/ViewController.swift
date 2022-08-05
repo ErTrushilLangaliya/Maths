@@ -51,30 +51,20 @@ class ViewController: UIViewController {
         let data = self.txtData.text!
         
         if (data.count != 0){
-            if (self.txtData.text!.last != ","){
+            if (self.txtData.text!.last == ","){
+                viewResult.isHidden = true
+                Shared().showAlert(uIViewController: self, title: Shared().title, message: "Please enter valid data")
+            }
+            else{
                 //Arrange array in a sequence
                 var pointsArr = data.components(separatedBy: ",")
                 pointsArr.sort {$0.localizedStandardCompare($1) == .orderedAscending}
                 
                 //Mean
-                let total = pointsArr.map { Int($0)! }   //Total Addition
-                let Median = Double(total.sum())/Double(total.count)
-                self.txtMean.text = "\((Median*100).rounded()/100)"     //2 decimal places
-                
-                //Meadian
-                if (pointsArr.count % 2 == 0) {
-                    print("even-length array (two middle elements)")
-                    let firstValue = pointsArr[pointsArr.count/2]
-                    let secoundValue = pointsArr[(pointsArr.count/2 - 1)]
-                    self.txtMeadian.text = "\(secoundValue) & \(firstValue)"
-                }else{
-                    print("odd-length array (only one middle element)")
-                    self.txtMeadian.text = "\(pointsArr[pointsArr.count/2])"
-                }
-            }
-            else{
-                viewResult.isHidden = true
-                Shared().showAlert(uIViewController: self, title: Shared().title, message: "Please enter valid data")
+                self.txtMean.text = "\(Shared().meanValue(pointsArr: pointsArr))"
+
+                //Median
+                self.txtMeadian.text = "\(Shared().medianValue(pointsArr: pointsArr))"
             }
             
         }else{
@@ -83,5 +73,4 @@ class ViewController: UIViewController {
         }
     }
 }
-
 
